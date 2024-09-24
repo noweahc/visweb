@@ -90,7 +90,7 @@ def show():
     st.write("시간에 따라 변하는 마니또 관계를 확인하세요.")
     
     # Load data
-    df = pd.read_csv('../manito.csv')
+    df = pd.read_csv('../../manito.csv')
     
     # Initialize full graph and positions
     if 'full_G' not in st.session_state or 'pos' not in st.session_state:
