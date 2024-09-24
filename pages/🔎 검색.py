@@ -40,10 +40,10 @@ for timestamp, group in df.groupby('timestamp'):
 # DataFrame으로 변환
 result_df = pd.DataFrame(result)
 
-# 누적 합 계산 (시간에 따른 누적 만남 횟수)
+# 누적 합 계산 (시간에 따른 누적 만남 횟수) - 시작점 0으로 동일하게 설정
 result_df = result_df.groupby(["timestamp", "person"]).sum().groupby('person').cumsum().reset_index()
 
-# 애니메이션 생성 함수
+# 애니메이션 생성 함수 - 시작점을 동일하게 하고, 그래프가 비교되도록 수정
 def animate_race(data):
     fig, ax = plt.subplots(figsize=(12, 8))
     
@@ -64,25 +64,27 @@ def animate_race(data):
         current_time = data['timestamp'].unique()[frame]
         current_data = data[data['timestamp'] <= current_time]
         
-        # 그때그때 상위 3명을 선택
+        # 그래프에 표시할 인물 리스트 (누적 만남 횟수가 많은 순서로 정렬)
         top_3_current = current_data.groupby('person')['count'].last().nlargest(3).index
 
         for i, person in enumerate(top_3_current):
             person_data = current_data[current_data['person'] == person]
             if person not in lines:
+                # 그래프의 시작점을 모두 동일하게 맞추기 위해 초기값 설정
                 lines[person], = ax.plot([], [], lw=4, label=person, color=colors[i % len(colors)])
                 labels[person] = ax.text(0, 0, person, fontsize=12, ha='right')
 
             x = list(range(len(person_data)))
-            y = person_data['count'].values + i * 5 + np.random.normal(0, 0.5, len(person_data))  # y축 위치에 변동 추가
+            y = person_data['count'].values  # y축은 누적된 만남 횟수
             
+            # 그래프 업데이트
             lines[person].set_data(x, y)
             
             # 이름을 그래프 끝에 표시
             labels[person].set_position((x[-1], y[-1]))
             labels[person].set_text(person[1:])  # 성을 제외한 이름 표시
 
-        # 마지막 프레임에 상위 3명 팝업 텍스트 추가
+        # 마지막 프레임에서 상위 3명을 텍스트로 표시
         if frame == num_frames - 1:
             top_3_current = current_data.groupby('person')['count'].last().nlargest(3)
             for rank, (person, count) in enumerate(top_3_current.items(), start=1):
