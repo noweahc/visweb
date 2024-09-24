@@ -20,7 +20,7 @@ def show():
     """)
 
     # 메인 페이지 이미지 로드 및 표시
-    image_path = "/Users/chaewon/Desktop/snukdt/시각화웹개발/project/Visualization/사진첩구현/체육대회/KakaoTalk_20240814_체육대회단체.jpg"
+    image_path = "KakaoTalk_20240814_체육대회단체.jpg"
     img = Image.open(image_path)
     st.image(img, use_column_width=True)
 
