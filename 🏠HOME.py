@@ -10,7 +10,7 @@ def show():
     st.sidebar.markdown("<h1 style='text-align: center; font-size: 100px;'>🌎</h1>", unsafe_allow_html=True)    
     # GitHub 링크 추가
     st.sidebar.markdown("**GitHub URL**")
-    st.sidebar.write("[Visit our GitHub](https://github.com/Fintech2024-Team2/Visualization)")
+    st.sidebar.write("[Visit our GitHub](https://github.com/noweahc/visweb)")
 
     # 메인 페이지 내용
     st.title("🎈 Workshop Visualization Project")
