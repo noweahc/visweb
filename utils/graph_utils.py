@@ -27,7 +27,7 @@ def plot_graph(G, pos, sub_df, font_prop):
     for node, (x, y) in pos.items():
         row = sub_df[sub_df['class'] == node].iloc[0]
         img_file = row['filename']
-        img_path = os.path.join('../../image', img_file)
+        img_path = os.path.join('streamlit/image', img_file)
         
         if os.path.exists(img_path):
             img = Image.open(img_path)
