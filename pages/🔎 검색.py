@@ -64,29 +64,36 @@ def animate_race(data):
     colors = ['lightcoral', 'lightblue', 'lightgreen', 'orange', 'purple']
     person_y_positions = {i: i + 1 for i in range(5)}  # 상위 5명을 위한 y축 위치 설정
 
+    # 실시간 라벨 업데이트 함수
     def update(frame):
+        # 현재 시간을 기반으로 데이터를 필터링
         current_time = data['timestamp'].unique()[frame]
         current_data = data[data['timestamp'] <= current_time]
 
         # 상위 5명을 가져오기
         top_5_current = current_data.groupby('person')['count'].last().nlargest(5).index
 
+        # 기존 라벨 삭제
+        for label in labels.values():
+            label.remove()
+
+        labels.clear()
+
         for i, person in enumerate(top_5_current):
             person_data = current_data[current_data['person'] == person]
             if person not in lines:
                 lines[person], = ax.plot([], [], lw=4, label=person, color=colors[i % len(colors)])
-                labels[person] = ax.text(0, 0, person, fontsize=12, ha='right')
 
+            # x축 값과 y축 값 설정
             x = list(range(len(person_data)))
             y = [person_y_positions[i]] * len(person_data)  # y값을 상위 5명에 대해 다르게 설정
             
             # 그래프 업데이트
             lines[person].set_data(x, y)
-            
-            # 이름을 그래프 끝에 표시
+
+            # 이름을 그래프 끝에 표시 (이전 이름 삭제 후 새로운 이름 추가)
             if len(x) > 0:
-                labels[person].set_position((x[-1], y[-1]))
-                labels[person].set_text(person)
+                labels[person] = ax.text(x[-1], y[-1], person, fontsize=12, ha='right')
 
         ax.set_title(f"Time: {current_time}")
         return list(lines.values()) + list(labels.values())
