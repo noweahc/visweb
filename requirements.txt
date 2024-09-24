@@ -4,3 +4,5 @@ Pillow
 numpy
 opencv-python
 matplotlib
+networkx
+plotly
