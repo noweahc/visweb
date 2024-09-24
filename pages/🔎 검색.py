@@ -6,6 +6,7 @@ import matplotlib.animation as animation
 import tempfile
 import matplotlib.font_manager as fm
 import matplotlib as mpl
+import platform
 
 # 운영체제 감지
 os_type = platform.system()

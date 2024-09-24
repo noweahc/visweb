@@ -4,6 +4,8 @@ import plotly.graph_objects as go
 import networkx as nx
 from PIL import Image
 import time
+import platform  # platform 모듈 임포트
+os_type = platform.system()
 
 # Function to create the full network graph and positions
 def create_full_network_graph(df):

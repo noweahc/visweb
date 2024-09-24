@@ -4,6 +4,9 @@ import os
 import networkx as nx
 import plotly.graph_objs as go
 from utils.graph_utils import create_graph
+import platform  # platform 모듈 임포트
+os_type = platform.system()
+
 
 # 데이터 로드
 df = pd.read_csv('../finaldata.csv')
