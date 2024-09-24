@@ -13,7 +13,6 @@ font_prop = fm.FontProperties(fname=font_path)
 plt.rcParams['font.family'] = font_prop.get_name()
 plt.rcParams['axes.unicode_minus'] = False  # 마이너스 기호 깨짐 방지
 
-
 # CSV 파일을 읽어오는 부분
 df = pd.read_csv("data/finaldata.csv")
 
@@ -42,62 +41,51 @@ for timestamp, group in df.groupby('timestamp'):
 # DataFrame으로 변환
 result_df = pd.DataFrame(result)
 
-# 누적 합 계산 (시간에 따른 누적 만남 횟수) - 시작점 0으로 동일하게 설정
+# 누적 합 계산 (시간에 따른 누적 만남 횟수)
 result_df = result_df.groupby(["timestamp", "person"]).sum().groupby('person').cumsum().reset_index()
 
-# 애니메이션 생성 함수 - 시작점을 동일하게 하고, 그래프가 비교되도록 수정
+# 애니메이션 생성 함수
 def animate_race(data):
     fig, ax = plt.subplots(figsize=(12, 8))
     
-    # x축 범위는 순위에 따라 설정
     num_frames = len(data['timestamp'].unique())
     ax.set_xlim(0, num_frames)
 
-    # y축 범위는 누적 만남 횟수에 따라 설정
-    numeric_max = data['count'].max()
-    ax.set_ylim(0, numeric_max + 50)  # 여유를 주기 위해 y축 범위를 더 늘림
+    # 출발점을 다르게 설정하여 수평선에서 움직임을 보이도록
+    ax.set_ylim(0, len(data['person'].unique()) * 10)
 
     # 라인 초기화
     lines = {}
-    colors = ['lightcoral', 'lightblue', 'lightgreen']
     labels = {}
+    colors = ['lightcoral', 'lightblue', 'lightgreen', 'orange', 'purple']
+    person_y_positions = {person: i * 10 for i, person in enumerate(data['person'].unique())}
 
     def update(frame):
         current_time = data['timestamp'].unique()[frame]
         current_data = data[data['timestamp'] <= current_time]
         
-        # 그래프에 표시할 인물 리스트 (누적 만남 횟수가 많은 순서로 정렬)
-        top_3_current = current_data.groupby('person')['count'].last().nlargest(3).index
-
-        for i, person in enumerate(top_3_current):
+        for person in person_y_positions:
             person_data = current_data[current_data['person'] == person]
             if person not in lines:
-                # 그래프의 시작점을 모두 동일하게 맞추기 위해 초기값 설정
-                lines[person], = ax.plot([], [], lw=4, label=person, color=colors[i % len(colors)])
+                # 각 인물의 수평선에서의 위치 설정
+                lines[person], = ax.plot([], [], lw=4, label=person, color=colors[hash(person) % len(colors)])
                 labels[person] = ax.text(0, 0, person, fontsize=12, ha='right')
 
             x = list(range(len(person_data)))
-            y = person_data['count'].values  # y축은 누적된 만남 횟수
+            y = [person_y_positions[person]] * len(person_data)  # 모두 같은 y값을 사용하여 수평 이동
             
             # 그래프 업데이트
             lines[person].set_data(x, y)
             
             # 이름을 그래프 끝에 표시
-            labels[person].set_position((x[-1], y[-1]))
-            labels[person].set_text(person[1:])  # 성을 제외한 이름 표시
+            if len(x) > 0:
+                labels[person].set_position((x[-1], y[-1]))
+                labels[person].set_text(person)
 
-        # 마지막 프레임에서 상위 3명을 텍스트로 표시
-        if frame == num_frames - 1:
-            top_3_current = current_data.groupby('person')['count'].last().nlargest(3)
-            for rank, (person, count) in enumerate(top_3_current.items(), start=1):
-                ax.text(num_frames * 0.95, numeric_max - 15 * rank, 
-                        f"{rank}위: {person}\n({count})", 
-                        fontsize=18, ha='right', color='black')
-                        
         ax.set_title(f"Time: {current_time}")
         return list(lines.values()) + list(labels.values())
 
-    # 애니메이션 속도를 조절 (interval 값을 더 크게 설정하여 속도 느리게)
+    # 애니메이션 속도를 조절
     ani = animation.FuncAnimation(fig, update, frames=num_frames, interval=900, blit=False, repeat=False)
 
     # 애니메이션을 GIF로 저장
