@@ -9,7 +9,7 @@ os_type = platform.system()
 
 
 # 데이터 로드
-df = pd.read_csv('streamlit/finaldata.csv')
+df = pd.read_csv('data/finaldata.csv')
 df['timestamp'] = pd.to_datetime(df['timestamp'])
 
 def plot_graph_plotly(G, pos, node_data):
