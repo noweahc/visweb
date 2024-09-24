@@ -10,17 +10,8 @@ import platform
 # 운영체제 감지
 os_type = platform.system()
 
-# 운영체제에 맞는 폰트 경로 설정
-if os_type == "Darwin":  # macOS
-    font_path = "/System/Library/Fonts/AppleSDGothicNeo.ttc"
-elif os_type == "Windows":  # Windows
-    font_path = "C:/Windows/Fonts/malgun.ttf"  # Windows의 맑은 고딕 폰트
-else:  # Linux
-    font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"  # 기본 Linux 폰트
 
-# 폰트 설정
-font_prop = fm.FontProperties(fname=font_path)
-mpl.rc('font', family=font_prop.get_name())
+mpl.rc('font', family='sans-serif')
 # CSV 파일을 읽어오는 부분
 df = pd.read_csv("data/finaldata.csv")
 
