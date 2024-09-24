@@ -24,7 +24,7 @@ font_prop = fm.FontProperties(fname=font_path)
 mpl.rc('font', family=font_prop.get_name())
 '''
 # CSV 파일을 읽어오는 부분
-df = pd.read_csv("streamlit/finaldata.csv")
+df = pd.read_csv("data/finaldata.csv")
 
 # 시간 데이터를 datetime 형식으로 변환
 df['timestamp'] = pd.to_datetime(df['timestamp'])
