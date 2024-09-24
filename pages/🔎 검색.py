@@ -7,13 +7,23 @@ import tempfile
 import matplotlib.font_manager as fm
 import matplotlib as mpl
 
+# 운영체제 감지
+os_type = platform.system()
+
+# 운영체제에 맞는 폰트 경로 설정
+if os_type == "Darwin":  # macOS
+    font_path = "/System/Library/Fonts/AppleSDGothicNeo.ttc"
+elif os_type == "Windows":  # Windows
+    font_path = "C:/Windows/Fonts/malgun.ttf"  # Windows의 한글 폰트 (맑은 고딕)
+else:  # Linux
+    font_path = "/usr/share/fonts/truetype/nanum/NanumGothic.ttf"  # Nanum Gothic 폰트
+
 # 한글 폰트 설정
-font_path = "/System/Library/Fonts/AppleSDGothicNeo.ttc"  # macOS의 한글 폰트 경로
 font_prop = fm.FontProperties(fname=font_path)
 mpl.rc('font', family=font_prop.get_name())
 
 # CSV 파일을 읽어오는 부분
-df = pd.read_csv("finaldata.csv")
+df = pd.read_csv("../finaldata.csv")
 
 # 시간 데이터를 datetime 형식으로 변환
 df['timestamp'] = pd.to_datetime(df['timestamp'])

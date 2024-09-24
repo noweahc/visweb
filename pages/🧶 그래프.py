@@ -6,7 +6,7 @@ import plotly.graph_objs as go
 from utils.graph_utils import create_graph
 
 # 데이터 로드
-df = pd.read_csv('finaldata.csv')
+df = pd.read_csv('../finaldata.csv')
 df['timestamp'] = pd.to_datetime(df['timestamp'])
 
 def plot_graph_plotly(G, pos, node_data):
