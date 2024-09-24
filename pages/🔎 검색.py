@@ -14,12 +14,13 @@ os_type = platform.system()
 if os_type == "Darwin":  # macOS
     font_path = "/System/Library/Fonts/AppleSDGothicNeo.ttc"
 elif os_type == "Windows":  # Windows
-    font_path = "C:/Windows/Fonts/malgun.ttf"  # Windows의 한글 폰트 (맑은 고딕)
+    font_path = "C:/Windows/Fonts/malgun.ttf"  # Windows의 맑은 고딕 폰트
+else:  # Linux
+    font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"  # 기본 Linux 폰트
 
-# 한글 폰트 설정
+# 폰트 설정
 font_prop = fm.FontProperties(fname=font_path)
 mpl.rc('font', family=font_prop.get_name())
-
 # CSV 파일을 읽어오는 부분
 df = pd.read_csv("data/finaldata.csv")
 
