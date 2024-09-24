@@ -48,7 +48,7 @@ result_df = pd.DataFrame(result)
 # 누적 합 계산 (시간에 따른 누적 만남 횟수)
 result_df = result_df.groupby(["timestamp", "person"]).sum().groupby('person').cumsum().reset_index()
 
-# 애니메이션 생성 함수 - 상위 5명만 표시
+# 애니메이션 생성 함수 - 상위 5명만 표시, 마지막에 1등 표시
 def animate_race(data):
     fig, ax = plt.subplots(figsize=(12, 8))
     
@@ -94,6 +94,12 @@ def animate_race(data):
             # 이름을 그래프 끝에 표시 (이전 이름 삭제 후 새로운 이름 추가)
             if len(x) > 0:
                 labels[person] = ax.text(x[-1], y[-1], person, fontsize=12, ha='right')
+
+        # 마지막 프레임에서 1등을 텍스트로 표시
+        if frame == num_frames - 1:
+            top_person = current_data.groupby('person')['count'].last().nlargest(1).index[0]
+            top_count = current_data.groupby('person')['count'].last().nlargest(1).values[0]
+            ax.text(num_frames * 0.95, 1, f"1등: {top_person} ({top_count})", fontsize=18, ha='right', color='black')
 
         ax.set_title(f"Time: {current_time}")
         return list(lines.values()) + list(labels.values())
