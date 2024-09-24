@@ -16,9 +16,6 @@ if os_type == "Darwin":  # macOS
     font_path = "/System/Library/Fonts/AppleSDGothicNeo.ttc"
 elif os_type == "Windows":  # Windows
     font_path = "C:/Windows/Fonts/malgun.ttf"  # Windows의 한글 폰트 (맑은 고딕)
-else:  # Linux
-    font_path = "/usr/share/fonts/truetype/nanum/NanumGothic.ttf"  # Nanum Gothic 폰트
-
 # 한글 폰트 설정
 font_prop = fm.FontProperties(fname=font_path)
 mpl.rc('font', family=font_prop.get_name())
