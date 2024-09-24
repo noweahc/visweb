@@ -1,0 +1,6 @@
+PyQt5==5.15.6
+lxml==4.6.3
+Pillow==8.2.0
+numpy==1.21.0
+opencv-python==4.5.2.52
+matplotlib
